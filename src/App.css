@@ -1,39 +1,42 @@
-.searchbox{
-    background-color: black;
-    padding: 10px;
-    box-sizing: border-box; 
+.searchbox {
+  background-color: black;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
-.searchbox input{
-    width: 20%;
-    height: 30px;
-    margin: 0 10px;
+.searchbox input {
+  width: 20%;
+  height: 30px;
+  margin: 0 10px;
 }
 
-.modal{
-    width: 25%;
-    /* border: 1px solid black; */
-    background-color: rgb(136, 134, 134);
-    padding: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    border-radius: 10px;
-    
+.alertSpan {
+  color: red;
 }
 
-.modalShadow{
-    position: absolute;
-    background-color: rgb(8 8 236 / 56%);
-    width: 100%;
-    height: 100vh;
-    top: 0;
-    left: 0;
+.modal {
+  width: 25%;
+  background-color: rgb(136, 134, 134);
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
 }
 
-.modal input,select{
-    width: 100%;
+.modalShadow {
+  position: absolute;
+  background-color: rgb(8 8 236 / 56%);
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.modal input,
+select {
+  width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -42,15 +45,13 @@
   box-sizing: border-box;
 }
 
-
-th,td{
-    border: 1px solid #ddd;
-    padding: 8px;
-  
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
 }
-button{
-    width: 20%;
-    padding: 5px 10px;
-    margin: 10px 20px;
+button {
+  width: 20%;
+  padding: 5px 10px;
+  margin: 10px 20px;
 }
-
