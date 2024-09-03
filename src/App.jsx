@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Modal from "./components/Modal";
 
 const classSection = [
   { class: 1, section: ["A", "B"] },
@@ -31,25 +32,19 @@ const initialList = [
     class: 3,
     section: "B",
     rollNumber: "3B001",
-  }
-]
-
+  },
+];
 
 function App() {
- 
-
-
   const [modal, setModal] = useState(false);
   const [section, setSection] = useState([]);
+  const [student, setStudent] = useState(initialValue);
   const [studentList, setStudentList] = useState(initialList);
   const [studentListCopy, setStudentListCopy] = useState(initialList);
   const [maxDate, setMaxDate] = useState("");
-
-  const [student, setStudent] = useState(initialValue);
+  const [errors, setErrors] = useState({});
 
   function handleChange(e) {
-    console.log("e.target.name", e.target.name);
-    console.log("e.target.name", e.target.value);
     let fieldName = e.target.name;
     let fieldValue = e.target.value;
     let studentCopy = { ...student };
@@ -60,6 +55,7 @@ function App() {
         .filter((classValue, i) => fieldValue == classValue.class)
         .map((e) => e.section);
       setSection(...copy);
+      studentCopy["section"] = "";
     }
 
     if (fieldName === "section") {
@@ -71,40 +67,80 @@ function App() {
 
   function generateRollNumber(studentAdded) {
     const students = studentList.filter(
-      (val) => val.class == studentAdded.class
+      (val) =>
+        val.class == studentAdded.class && val.section === studentAdded.section
     );
-    console.log("gen", students, students.length);
     let uniqueNumber = students.length > 0 ? students.length + 1 : 1;
-    console.log("uniqueNumber", uniqueNumber);
     let studentCopy = { ...studentAdded };
 
     studentCopy["rollNumber"] =
-      studentAdded.class + studentAdded.section + uniqueNumber;
+      studentAdded.class +
+      studentAdded.section +
+      uniqueNumber.toString().padStart(3, "0");
 
-    console.log(studentCopy);
     return studentCopy;
   }
 
+  const validate = () => {
+    let studentErrors = {};
+
+    // Username validation: required field
+    if (!student.firstName.trim()) {
+      studentErrors.firstName = "First name is required";
+    } else if (!/^[A-Za-z]+$/.test(student.firstName)) {
+      studentErrors.firstName = "First name is not valid";
+    }
+    if (!student.lastName.trim()) {
+      studentErrors.lastName = "Last name is required";
+    } else if (!/^[A-Za-z]+$/.test(student.lastName)) {
+      studentErrors.lastName = "Last name is not valid";
+    }
+    if (!student.dob.trim()) {
+      studentErrors.dob = "DOB is required";
+    }
+    if (!student.class.trim()) {
+      studentErrors.class = "class is required";
+    }
+    if (!student.section.trim()) {
+      studentErrors.section = "section is required";
+    }
+    // if (!student.firstName.trim()) {
+    //   studentErrors.username = 'Username is required';
+    // }
+    setErrors(studentErrors);
+    return Object.keys(studentErrors).length === 0;
+  };
+
   function handSubmit(event) {
     event.preventDefault();
-    let studentListCopy = [...studentList];
-    studentListCopy.unshift(student);
-    setStudentList(studentListCopy);
-    setStudentListCopy(studentListCopy);
-    setStudent(initialValue);
-    setModal(false);
+
+    if (validate()) {
+      setStudentList((prev) => [student, ...prev]);
+      setStudentListCopy((prev) => [student, ...prev]);
+      setStudent(initialValue);
+      setModal(false);
+    } else {
+      console.log("student has errors.");
+    }
   }
 
   function handleSearchStudent(event) {
-    let name = event.target.value;
-    console.log(name);
+    let filedName = event.target.name;
+    let name = event.target.value.toLowerCase();
     if (!name) {
       setStudentList(studentListCopy);
     } else {
-      let list = studentList.filter((studentObj) =>
-        studentObj.firstName.includes(name)
-      );
-      list;
+      let list;
+      if (filedName === "search-name") {
+        list = studentList.filter((studentObj) =>
+          studentObj.firstName.toLowerCase().includes(name)
+        );
+      }
+      if (filedName === "search-rollNumber") {
+        list = studentList.filter((studentObj) =>
+          studentObj.rollNumber.toLowerCase().includes(name)
+        );
+      }
       setStudentList(list);
     }
   }
@@ -126,96 +162,38 @@ function App() {
   return (
     <>
       <div className="searchbox">
-        <input type="text" name="search" id="" placeholder="Search student name" onChange={handleSearchStudent} />
+        <input
+          type="text"
+          name="search-name"
+          id=""
+          placeholder="Search student name"
+          onChange={handleSearchStudent}
+        />
+        <input
+          type="text"
+          name="search-rollNumber"
+          id=""
+          placeholder="Search student Roll Number"
+          onChange={handleSearchStudent}
+        />
         <button onClick={handleModal}>Add new student</button>
       </div>
 
       {/* Modal Section */}
 
-      {modal && (
-        <div className="modalShadow">
-          <div className="modal">
-            <form>
-              <label htmlFor="fisrtName">First name</label>
-              <input
-                type="text"
-                name="firstName"
-                id="firstName"
-                value={student.firstName}
-                onChange={handleChange}
-              />
-              <br />
-              <label htmlFor="lastName">Last name</label>
-              <input
-                type="text"
-                name="lastName"
-                id="lastName"
-                value={student.lastName}
-                onChange={handleChange}
-              />
-              <br />
-              <label htmlFor="dob">Date Of Birth</label>
-              <input
-                type="date"
-                name="dob"
-                id="dob"
-                value={student.dob}
-                onChange={handleChange}
-                max={maxDate}
-              />
-              <br />
-              <label htmlFor="class">Class</label>
-              <select
-                className="inputFeild"
-                name="class"
-                id="class"
-                value={student.class}
-                onChange={handleChange}
-              >
-                {" "}
-                <option value="">Please select class</option>
-                {classSection.map((classValue, i) => {
-                  return (
-                    <option key={i} value={`${classValue.class}`}>
-                      {classValue.class}
-                    </option>
-                  );
-                })}
-              </select>
-              <br />
-              <label htmlFor="section">Section</label>
-              <select
-                name="section"
-                id="section"
-                className="inputFeild"
-                onChange={handleChange}
-                value={student.section}
-              >
-                <option value="">Please select Section</option>
-                {section?.map((value, i) => {
-                  return (
-                    <option key={i} value={`${value}`}>
-                      {value}
-                    </option>
-                  );
-                })}
-              </select>
-              <br />
-              <label htmlFor="rollNumber"></label>
-              <input
-                type="text"
-                name="rollNumber"
-                id="rollNumber"
-                value={student.rollNumber}
-                disabled
-              />
-              <br />
-              <button onClick={handSubmit}>Submit</button>
-              <button onClick={handleModal}>Cancel</button>
-            </form>
-          </div>
-        </div>
-      )}
+      <Modal
+        modal={modal}
+        handleChange={handleChange}
+        handSubmit={handSubmit}
+        section={section}
+        handleModal={handleModal}
+        student={student}
+        maxDate={maxDate}
+        classSection={classSection}
+        errors={errors}
+      />
+
+      <h3>Student list</h3>
 
       <table>
         <thead>
@@ -231,10 +209,10 @@ function App() {
           {studentList?.map((student, i) => {
             return (
               <tr key={i}>
-                <th>{student.firstName}</th>
-                <th>{student.class}</th>
-                <th>{student.section}</th>
-                <th>{student.rollNumber}</th>
+                <td>{student.firstName}</td>
+                <td>{student.class}</td>
+                <td>{student.section}</td>
+                <td>{student.rollNumber}</td>
               </tr>
             );
           })}
