@@ -203,7 +203,7 @@ function App() {
             <th>Name</th>
             <th>Class</th>
             <th>Section</th>
-            <th>Roll NUmber</th>
+            <th>Roll Number</th>
           </tr>
         </thead>
 
