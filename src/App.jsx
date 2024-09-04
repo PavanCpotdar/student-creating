@@ -145,9 +145,11 @@ function App() {
     }
   }
 
-  function handleModal() {
+  function handleModal(e) {
+
     setModal((prev) => !prev);
     setStudent(initialValue);
+    setErrors({});
   }
 
   useEffect(() => {

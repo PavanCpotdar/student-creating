@@ -13,10 +13,18 @@ function Modal(props) {
     modal,
   } = props;
 
+  const checkKeyDown = (e) => {
+    console.log(e)
+    if (e.key === 'Enter') e.preventDefault();
+  };
+
   return (
     modal && (
-      <div className="modalShadow">
+      <div className="modalShadow" 
+      onKeyDown={(e) => checkKeyDown(e)}
+      >
         <div className="modal">
+        <span onClick={handleModal} class="close">&times;</span>
           <form onSubmit={handSubmit}>
             <label htmlFor="fisrtName">First name</label>
             <input
@@ -91,7 +99,7 @@ function Modal(props) {
               })}
             </select>
             {errors.section && (
-              <span className="alertSpan">{errors.section}</span>
+              <span  className="alertSpan">{errors.section}</span>
             )}
             <br />
             <label htmlFor="rollNumber">Roll Number</label>
