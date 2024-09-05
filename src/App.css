@@ -64,6 +64,17 @@ td {
   border: 1px solid #ddd;
   padding: 8px;
 }
+.searchbox button{
+  width: 10%;
+  padding: 5px 10px;
+  margin: 10px 20px;
+  background-color: rgb(27, 125, 210);
+  color: white;
+  font-size: medium;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+}
 button {
   width: 25%;
   padding: 5px 10px;

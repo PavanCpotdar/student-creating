@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Modal from "./components/Modal";
+import Table from "./components/Table";
 
 const classSection = [
   { class: 1, section: ["A", "B"] },
@@ -197,29 +198,9 @@ function App() {
 
       <h3>Student list</h3>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Class</th>
-            <th>Section</th>
-            <th>Roll Number</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {studentList?.map((student, i) => {
-            return (
-              <tr key={i}>
-                <td>{student.firstName}</td>
-                <td>{student.class}</td>
-                <td>{student.section}</td>
-                <td>{student.rollNumber}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+     <Table
+     studentList={studentList}
+     />
     </>
   );
 }
